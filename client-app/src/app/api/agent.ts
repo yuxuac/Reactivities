@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IActivity } from "../../Models/activity";
+import { IActivity } from "../Models/activity";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
