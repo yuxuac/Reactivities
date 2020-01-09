@@ -13,10 +13,6 @@ class ActivityStore {
   @observable target = "";
 
   @computed get activitiesByDate() {
-    // console.log(this.groupActivitiesByDate(
-    //   Array.from(this.activityRegistry.values())
-    // ));
-
     return this.groupActivitiesByDate(
       Array.from(this.activityRegistry.values())
     );
@@ -54,7 +50,6 @@ class ActivityStore {
       runInAction("load activities error", () => {
         this.loadingInitial = false;
       });
-
       console.log(error);
     }
   };
@@ -76,6 +71,7 @@ class ActivityStore {
           this.loadingInitial = false;
         });
         console.log(error);
+        //throw error;
       }
     }
   };
