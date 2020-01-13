@@ -36,6 +36,7 @@ const validate = combineValidators({
   date: isRequired("Date"),
   time: isRequired("Time")
 });
+
 interface DetailParams {
   id: string;
 }
