@@ -4,7 +4,6 @@ import {
   ActivityFormValues
 } from "../../../app/Models/activity";
 import { v4 as uuid } from "uuid";
-import ActivityStore from "../../../app/stores/ActivityStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
@@ -21,6 +20,7 @@ import {
   composeValidators,
   hasLengthGreaterThan
 } from "revalidate";
+import { RootStoreContext } from "../../../app/stores/RootStore";
 
 const validate = combineValidators({
   title: isRequired({ message: "The event title is required" }),
@@ -45,13 +45,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history
 }) => {
-  const activityStore = useContext(ActivityStore);
+  const rootStore = useContext(RootStoreContext);
   const {
     createActivity,
     editActivity,
     submitting,
     loadActivity
-  } = activityStore;
+  } = rootStore.activityStore;
 
   // Input: initializeForm, output: IActivity
   const [activity, setActivity] = useState(new ActivityFormValues());

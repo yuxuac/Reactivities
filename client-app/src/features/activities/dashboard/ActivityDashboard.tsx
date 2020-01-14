@@ -4,21 +4,24 @@ import ActivityList from "./ActivityList";
 import { observer } from 'mobx-react-lite'
 import { useLocation } from "react-router-dom";
 import { LoadingComponent } from "../../../app/layout/LoadingComponent";
-import ActivityStore from "../../../app/stores/ActivityStore";
+import { RootStoreContext } from "../../../app/stores/RootStore";
 
 const ActivityDashboard: React.FC = () => {
-  const activityScore = useContext(ActivityStore);
+  const rootStore = useContext(RootStoreContext);
+
+  const {loadActivities, loadingInitial} = rootStore.activityStore;
+
   const { pathname } = useLocation();
   
   useEffect(() => {
-    activityScore.loadActivities();
-  }, [activityScore]);
+    loadActivities();
+  }, [loadActivities]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
   
-  if (activityScore.loadingInitial)
+  if (loadingInitial)
     return <LoadingComponent content="Loading activities..." />;
 
   return (
