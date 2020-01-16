@@ -200,7 +200,7 @@ export default class ActivityStore {
       runInAction(() => {
         if (this.activity) {
           this.activity.attendees = this.activity.attendees.filter(
-            a => a.username !== this.rootStore.userStore.user!.userName
+            a => a.username !== this.rootStore.userStore.user!.username
           );
           this.activity.isGoing = false;
           this.activityRegistry.set(this.activity.id, this.activity);

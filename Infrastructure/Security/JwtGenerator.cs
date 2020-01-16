@@ -16,8 +16,8 @@ namespace Infrastructure.Security
 
         public JwtGenerator(IConfiguration config)
         {
-            Console.WriteLine("JwtGenerator->config:" + config.GetType());
-            Console.WriteLine("JwtGenerator->config['TokenKey']:" + config["TokenKey"]);
+            //Console.WriteLine("JwtGenerator->config:" + config.GetType());
+            //Console.WriteLine("JwtGenerator->config['TokenKey']:" + config["TokenKey"]);
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
 

@@ -72,8 +72,8 @@ namespace Application.User
                     {
                         DisplayName = user.DisplayName,
                         Token = _jetGenerator.CreateToken(user),
-                        UserName = user.UserName,
-                        Image = null
+                        Username = user.UserName,
+                        Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
                     };
                 }
 
