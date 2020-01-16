@@ -6,7 +6,7 @@ import { LoadingComponent } from "../../../app/layout/LoadingComponent";
 import ActivityDetailedHeader from "./ActivityDetailedHeader";
 import { ActivityDetailedInfo } from "./ActivityDetailedInfo";
 import { ActivityDetailedChat } from "./ActivityDetailedChat";
-import { ActivityDetailedSidebar } from "./ActivityDetailedSidebar";
+import ActivityDetailedSidebar from "./ActivityDetailedSidebar";
 import { RootStoreContext } from "../../../app/stores/RootStore";
 
 interface DetailParams {
@@ -14,7 +14,8 @@ interface DetailParams {
 }
 
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
-  match, history
+  match,
+  history
 }) => {
   const rootStore = useContext(RootStoreContext);
   const activityStore = rootStore.activityStore;
@@ -22,7 +23,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
 
   useEffect(() => {
     loadActivity(match.params.id);
-  }, [loadActivity, match.params.id, history]);
+  }, [loadActivity, match.params.id, history, activity]);
 
   if (loadingInitial) return <LoadingComponent content="Loading activity..." />;
 
@@ -36,7 +37,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
         <ActivityDetailedChat></ActivityDetailedChat>
       </Grid.Column>
       <Grid.Column width={6}>
-        <ActivityDetailedSidebar></ActivityDetailedSidebar>
+        <ActivityDetailedSidebar attendees={activity.attendees} />
       </Grid.Column>
     </Grid>
   );
