@@ -13,7 +13,8 @@ export default class ProfileStore {
   @observable profile: IProfile | null = null;
   @observable loadingProfile = true;
   @observable uploadingPhoto = false;
-  @observable loading = false;
+  @observable loadingPhoto = false;
+  @observable updatingProfile = false;
 
   @computed get isCurrentUser() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -62,7 +63,7 @@ export default class ProfileStore {
   };
 
   @action setMainPhoto = async (photo: IPhoto) => {
-    this.loading = true;
+    this.loadingPhoto = true;
     try {
       await agent.Profiles.setMainPhoto(photo.id);
       runInAction(() => {
@@ -70,31 +71,44 @@ export default class ProfileStore {
         this.profile!.photos.find(a => a.isMain)!.isMain = false;
         this.profile!.photos.find(a => a.id === photo.id)!.isMain = true;
         this.profile!.image = photo.url;
-        this.loading = false;
+        this.loadingPhoto = false;
       });
     } catch (error) {
       toast.error("Problem setting photo as main");
       runInAction(() => {
-        this.loading = false;
+        this.loadingPhoto = false;
       });
     }
   };
 
   @action deletePhoto = async (photo: IPhoto) => {
-    this.loading = true;
+    this.loadingPhoto = true;
     try {
       await agent.Profiles.deletePhoto(photo.id);
       runInAction(() => {
         this.profile!.photos = this.profile!.photos.filter(
           a => a.id !== photo.id
         );
-        this.loading = false;
+        this.loadingPhoto = false;
       });
     } catch (error) {
       toast.error("Problem deleting the photo");
       runInAction(() => {
-        this.loading = false;
+        this.loadingPhoto = false;
       });
+    }
+  };
+
+  @action editProfile = async (profile: Partial<IProfile>) => {
+    try {
+      await agent.Profiles.update(profile);
+      runInAction(() => {
+        if (this.rootStore.userStore.user)
+          this.rootStore.userStore.user.displayName = profile.displayName!;
+        this.profile = { ...this.profile!, ...profile };
+      });
+    } catch (error) {
+      toast.error("Problem updating profile");
     }
   };
 }

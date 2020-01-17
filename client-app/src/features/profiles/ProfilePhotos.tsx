@@ -13,7 +13,7 @@ const ProfilePhotos = () => {
     uploadingPhoto,
     setMainPhoto,
     deletePhoto,
-    loading
+    loadingPhoto
   } = rootStore.profileStore;
 
   const [addPhotoMode, setAddPhotoMode] = useState(false);
@@ -31,7 +31,6 @@ const ProfilePhotos = () => {
       <Grid>
         <Grid.Column width={16} style={{ paddingBottom: 0 }}>
           <Header floated="left" icon="image" content="Photos" />
-
           {isCurrentUser && (
             <Button
               floated="right"
@@ -41,6 +40,7 @@ const ProfilePhotos = () => {
             />
           )}
         </Grid.Column>
+        
         <Grid.Column width={16}>
           {addPhotoMode && isCurrentUser ? (
             <PhotoUploadWidget
@@ -65,7 +65,7 @@ const ProfilePhotos = () => {
                           positive
                           disabled={photo.isMain}
                           content="Main"
-                          loading={loading && target === photo.id}
+                          loading={loadingPhoto && target === photo.id}
                         />
                         <Button
                           name={photo.id}
@@ -74,7 +74,7 @@ const ProfilePhotos = () => {
                             deletePhoto(photo);
                             setDeleteTarget(e.currentTarget.name);
                           }}
-                          loading={loading && deleteTarget === photo.id}
+                          loading={loadingPhoto && deleteTarget === photo.id}
                           basic
                           negative
                           icon="trash"
