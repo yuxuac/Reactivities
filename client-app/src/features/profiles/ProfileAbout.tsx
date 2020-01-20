@@ -10,7 +10,7 @@ const ProfileAbout = () => {
   const {
     profile,
     isCurrentUser,
-    updatingProfile,
+    loading,
     editProfile
   } = rootStore.profileStore;
 
@@ -37,7 +37,7 @@ const ProfileAbout = () => {
               basic
               content={editMode ? "Cancel" : "Edit Profile"}
               onClick={e => setEditMode(!editMode)}
-              disabled={editMode && updatingProfile}
+              disabled={editMode && loading}
             />
           )}
         </Grid.Column>

@@ -13,7 +13,7 @@ const ProfilePhotos = () => {
     uploadingPhoto,
     setMainPhoto,
     deletePhoto,
-    loadingPhoto
+    loading
   } = rootStore.profileStore;
 
   const [addPhotoMode, setAddPhotoMode] = useState(false);
@@ -65,7 +65,7 @@ const ProfilePhotos = () => {
                           positive
                           disabled={photo.isMain}
                           content="Main"
-                          loading={loadingPhoto && target === photo.id}
+                          loading={loading && target === photo.id}
                         />
                         <Button
                           name={photo.id}
@@ -74,7 +74,7 @@ const ProfilePhotos = () => {
                             deletePhoto(photo);
                             setDeleteTarget(e.currentTarget.name);
                           }}
-                          loading={loadingPhoto && deleteTarget === photo.id}
+                          loading={loading && deleteTarget === photo.id}
                           basic
                           negative
                           icon="trash"
