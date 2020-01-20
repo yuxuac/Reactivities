@@ -29,3 +29,22 @@ export const createAttendee = (user: IUser): IAttendee => {
     image: user.image!
   };
 };
+
+// export const sleep = (ms: number) => {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// };
+
+// export const assureHubStableStatus = async (hub: HubConnection | null) => {
+//   if (!hub) throw new Error("there is no hub");
+
+//   while (
+//     hub.state === "Connecting" ||
+//     hub.state === "Disconnecting" ||
+//     hub.state === "Reconnecting"
+//   ) {
+//     console.log("Wait to (dis)connect, now state is:" + hub.state);
+//     await sleep(1000);
+//   }
+
+//   console.log("Now connected");
+// };
