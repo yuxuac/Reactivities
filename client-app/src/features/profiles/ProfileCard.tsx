@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Image, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { IProfile } from "../../app/Models/profile";
-import { observer } from "mobx-react-lite";
 
 interface IProps {
   profile: IProfile;
