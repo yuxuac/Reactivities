@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Persistence
 {
@@ -8,6 +9,17 @@ namespace Persistence
     {
         public DataContext(DbContextOptions options) : base(options)
         {
+        }
+
+        public static readonly ILoggerFactory _myLoggerFactory = 
+            LoggerFactory.Create(builder => { builder.AddConsole(); });
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // optionsBuilder.UseLoggerFactory(_myLoggerFactory); 
+            // optionsBuilder.EnableSensitiveDataLogging(true);
+            // optionsBuilder.UseSqlServer(
+            //     @"Server=localhost;Database=reactivities;User ID=sa;Password=1qaz!QAZ;");
         }
 
         public DbSet<Value> Values { get; set; }
@@ -53,7 +65,7 @@ namespace Persistence
                  .WithMany(f => f.Followings)
                  .HasForeignKey(o => o.ObserverId)
                  .OnDelete(DeleteBehavior.Restrict);
-                
+
                 b.HasOne(o => o.Target)
                  .WithMany(f => f.Followers)
                  .HasForeignKey(o => o.TargetId)

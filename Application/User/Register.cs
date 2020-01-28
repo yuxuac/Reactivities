@@ -30,7 +30,7 @@ namespace Application.User
             public CommandValidator()
             {
                 RuleFor(x => x.DisplayName).NotEmpty();
-                RuleFor(x => x.UserName).NotEmpty();
+                RuleFor(x => x.UserName).NotEmpty();//.Matches("^[0-9a-zA-Z]+$").WithMessage("Username only accept digits and chars.");
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
                 RuleFor(x => x.Password).Password();
             }
@@ -73,8 +73,14 @@ namespace Application.User
                         DisplayName = user.DisplayName,
                         Token = _jetGenerator.CreateToken(user),
                         Username = user.UserName,
-                        Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
+                        Image = user.Photos?.FirstOrDefault(x => x.IsMain)?.Url
                     };
+                }
+                else if (result.Errors.Any(err => err is IdentityError))
+                {
+                    var error = result.Errors.FirstOrDefault(err => err is IdentityError);
+                    var errorMsg = error.Code + "-" + error.Description;
+                    throw new RestException(HttpStatusCode.BadRequest, new { UserName = errorMsg });
                 }
 
                 throw new Exception("Problem creating user");

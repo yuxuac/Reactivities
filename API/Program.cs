@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Domain;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +16,7 @@ namespace API
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            
+
             // Ensure data base schemes are updated.
             using (var scope = host.Services.CreateScope())
             {
@@ -41,7 +42,11 @@ namespace API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
+                    webBuilder.UseIISIntegration();
                     webBuilder.UseStartup<Startup>();
+                    // webBuilder.UseKestrel(x => x.AddServerHeader = false);
+                    // webBuilder.UseStartup<Startup>();
                 });
     }
 }
