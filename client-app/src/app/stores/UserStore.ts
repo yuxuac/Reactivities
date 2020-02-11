@@ -11,6 +11,8 @@ export default class UserStore {
   }
 
   @observable user: IUser | null = null;
+  @observable loading = false;
+
   @computed get isLoggedIn() {
     return !!this.user;
   }
@@ -31,16 +33,16 @@ export default class UserStore {
     }
   };
 
-  @action register= async(values: IUserFormValues) => {
+  @action register = async (values: IUserFormValues) => {
     try {
       const user = await agent.User.register(values);
       this.rootStore.commonStore.setToken(user.token);
       this.rootStore.modalStore.closeModal();
-      history.push('/activities');
+      history.push("/activities");
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   @action getUser = async () => {
     try {
@@ -57,5 +59,23 @@ export default class UserStore {
     this.rootStore.commonStore.setToken(null);
     this.user = null;
     history.push("/");
+  };
+
+  @action fbLogin = async (response: any) => {
+    this.loading = true;
+    try {
+      const user = await agent.User.fbLogin(response.accessToken);
+      console.log(user);
+      runInAction(() => {
+        this.user = user;
+        this.rootStore.commonStore.setToken(user.token);
+        this.rootStore.modalStore.closeModal();
+        this.loading = false;
+      });
+      history.push('/activities');
+    } catch (error) {
+      this.loading = false;
+      throw error;
+    }
   };
 }

@@ -31,11 +31,16 @@ axios.interceptors.response.use(undefined, error => {
     history.push("/notfound");
   }
 
-  if(status === 401 && 
-     headers['www-authenticate'].startsWith('Bearer error="invalid_token", error_description="The token expired at')) {
-    window.localStorage.removeItem('jwt');
-    history.push('/');
-    toast.info('Your session has expired, please login again.');
+  if (
+    status === 401 &&
+    headers["www-authenticate"] &&
+    headers["www-authenticate"].startsWith(
+      'Bearer error="invalid_token", error_description="The token expired at'
+    )
+  ) {
+    window.localStorage.removeItem("jwt");
+    history.push("/");
+    toast.info("Your session has expired, please login again.");
   }
   if (
     status === 400 &&
@@ -55,22 +60,10 @@ axios.interceptors.response.use(undefined, error => {
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) =>
-    axios
-      .get(url)
-      .then(responseBody),
-  post: (url: string, body: {}) =>
-    axios
-      .post(url, body)
-      .then(responseBody),
-  put: (url: string, body: {}) =>
-    axios
-      .put(url, body)
-      .then(responseBody),
-  del: (url: string) =>
-    axios
-      .delete(url)
-      .then(responseBody),
+  get: (url: string) => axios.get(url).then(responseBody),
+  post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
+  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+  del: (url: string) => axios.delete(url).then(responseBody),
   postForm: (url: string, file: Blob) => {
     let formData = new FormData();
     formData.append("File", file);
@@ -84,9 +77,7 @@ const requests = {
 
 const Activities = {
   list: (params: URLSearchParams): Promise<IActivitiesEnvelop> =>
-    axios
-      .get("/activities", { params: params })
-      .then(responseBody),
+    axios.get("/activities", { params: params }).then(responseBody),
   details: (id: string) => requests.get(`/activities/${id}`),
   create: (activity: IActivity) => requests.post("/activities", activity),
   update: (activity: IActivity) =>
@@ -101,7 +92,9 @@ const User = {
   login: (user: IUserFormValues): Promise<IUser> =>
     requests.post("/user/login", user),
   register: (user: IUserFormValues): Promise<IUser> =>
-    requests.post("/user/register", user)
+    requests.post("/user/register", user),
+  fbLogin: (accessToken: string) =>
+    requests.post(`/user/facebook`, { accessToken })
 };
 
 const Profiles = {
@@ -117,7 +110,7 @@ const Profiles = {
   unfollow: (username: string) => requests.del(`/profiles/${username}/follow`),
   listFollowings: (username: string, predicate: string) =>
     requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
-  listActivities: (username: string, predicate: string) => 
+  listActivities: (username: string, predicate: string) =>
     requests.get(`/profiles/${username}/activities?predicate=${predicate}`)
 };
 
