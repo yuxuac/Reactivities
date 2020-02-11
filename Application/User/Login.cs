@@ -23,7 +23,7 @@ namespace Application.User
         {
             public QueryValidator()
             {
-                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.Email).NotEmpty().EmailAddress();
                 RuleFor(x => x.Password).NotEmpty();
             }
         }
@@ -47,7 +47,7 @@ namespace Application.User
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
-                    throw new RestException(HttpStatusCode.Unauthorized);
+                    throw new RestException(HttpStatusCode.Unauthorized, new { user = "User not found" } );
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
